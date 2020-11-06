@@ -39,6 +39,9 @@ func (bs *BitString) AsHexString() string {
 		sl = append(sl, elem)
 	}
 	for i := 0; i < len(sl); i++ {
+		if i % 4 > 0 {
+			continue
+		}
 		k, l, m, n := sl[i], sl[i+1], sl[i+2], sl[i+3]
 		l = l * 2
 		m = l * 4
