@@ -14,7 +14,7 @@ type BitString struct {
 	bitArray []uint8
 }
 
-// Returns BitString.bitArray as normalString
+// Returns BitString.bitArray as string without further parsing.
 func (bs *BitString) AsString() string {
 	var s = ""
 	for _, bit := range bs.bitArray {
@@ -23,14 +23,45 @@ func (bs *BitString) AsString() string {
 	return s
 }
 
-//BUG(mjwhodur): Not yet working properly
+//Returns BitString value formatted as "0b...".
 func (bs *BitString) AsBinaryString() string {
-	return ""
+	return "0b" + bs.AsString()
 }
 
-//BUG(mjwhodur): Not yet working properly
+//Returns BitString as Hex String with padding.
 func (bs *BitString) AsHexString() string {
-	return ""
+	padding := "0x"
+	var sl []uint8
+	for i := bs.BitLength() % 4; i > 0; i-- {
+		sl = append(sl, 0)
+	}
+	for _, elem := range bs.bitArray {
+		sl = append(sl, elem)
+	}
+	for i := 0; i < len(sl); i++ {
+		k, l, m, n := sl[i], sl[i+1], sl[i+2], sl[i+3]
+		l = l * 2
+		m = l * 4
+		n = n * 8
+		switch k + l + m + n {
+		case 10:
+			padding = padding + "a"
+		case 11:
+			padding = padding + "b"
+		case 12:
+			padding = padding + "c"
+		case 13:
+			padding = padding + "d"
+		case 14:
+			padding = padding + "e"
+		case 15:
+			padding = padding + "f"
+		default:
+			padding = padding + strconv.Itoa(int(k+l+m+n))
+		}
+
+	}
+	return padding
 }
 
 //BUG(mjwhodur): Not yet working properly
@@ -113,4 +144,3 @@ func ByteToBitArray(b byte) BitString {
 
 	return BitString{bitArray: revbitSlice}
 }
-
