@@ -32,6 +32,11 @@ func (bs *BitString) AsOctString() string {
 	return ""
 }
 
+// Returns subsstring of one BitString as new BitString
+func (bs *BitString) Substring(start int, end int) BitString {
+	return BitString{BitArray: bs.BitArray[start:end]}
+}
+
 //BUG(mjwhodur): Not yet working properly
 func (bs *BitString) BitLength() int {
 	return len(bs.BitArray)
@@ -85,6 +90,7 @@ func FromStream(buffer bytes.Buffer) (error, BitString) {
 	return nil, BitString{}
 }
 
+// Creates BitString struct from single byte.
 func ByteToBitArray(b byte) BitString {
 	var revbitSlice []uint8
 	var bitSlice []uint8
