@@ -1,22 +1,24 @@
 // Package bitstring provides functions for parsing and manipulation of
-//
+// bits in byte streams and bytearrays. Note, that this package is not so
+// memory-efficient.
 package bitstring
 
 import (
 	"bytes"
 	"math"
+	"strconv"
 )
 
 // Base BitString structure consisting of bytes representing
 type BitString struct {
-	BitArray []uint8
+	bitArray []uint8
 }
 
-// BUG(mjwhodur): Not yet working properly
+// Returns BitString.bitArray as normalString
 func (bs *BitString) AsString() string {
 	var s = ""
-	for _, bit := range bs.BitArray {
-		s = s + string(bit)
+	for _, bit := range bs.bitArray {
+		s = s + strconv.Itoa(int(bit))
 	}
 	return s
 }
@@ -38,12 +40,12 @@ func (bs *BitString) AsOctString() string {
 
 // Returns subsstring of one BitString as new BitString
 func (bs *BitString) Substring(start int, end int) BitString {
-	return BitString{BitArray: bs.BitArray[start:end]}
+	return BitString{bitArray: bs.bitArray[start:end]}
 }
 
 //BUG(mjwhodur): Not yet working properly
 func (bs *BitString) BitLength() int {
-	return len(bs.BitArray)
+	return len(bs.bitArray)
 }
 
 //BUG(mjwhodur): Not yet working properly
@@ -68,10 +70,10 @@ func (bs *BitString) BitStringToTBCD(start int, end int) (error, string) {
 	return nil, ""
 }
 
-// Appends byte to BitArray as bits
+// Appends byte to bitArray as bits
 func (bs *BitString) appendByte(rune byte) error {
-	for _, bitVal := range ByteToBitArray(rune).BitArray {
-		bs.BitArray = append(bs.BitArray, bitVal)
+	for _, bitVal := range ByteToBitArray(rune).bitArray {
+		bs.bitArray = append(bs.bitArray, bitVal)
 	}
 
 	return nil
@@ -97,10 +99,10 @@ func FromStream(buffer bytes.Buffer) (error, BitString) {
 // Creates BitString struct from single byte.
 func ByteToBitArray(b byte) BitString {
 	var revbitSlice []uint8
-	var bitSlice []uint8
-	for x := 0; x < 8; x++ {
-		c := byte(math.Pow(2, float64(x)))
-		if c < b {
+	for x := 7; x > 0; x-- {
+		c := uint8(math.Pow(2, float64(x-1)))
+		if c <= b {
+
 			b = b - c
 			revbitSlice = append(revbitSlice, 1)
 
@@ -109,8 +111,6 @@ func ByteToBitArray(b byte) BitString {
 		}
 	}
 
-	for i := len(revbitSlice) - 1; i == 0; i-- {
-		bitSlice = append(bitSlice, revbitSlice[i])
-	}
-	return BitString{BitArray: bitSlice}
+	return BitString{bitArray: revbitSlice}
 }
+
