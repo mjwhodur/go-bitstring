@@ -130,7 +130,7 @@ func FromStream(buffer bytes.Buffer) (error, BitString) {
 // Creates BitString struct from single byte.
 func ByteToBitArray(b byte) BitString {
 	var revbitSlice []uint8
-	for x := 7; x > 0; x-- {
+	for x := 8; x > 0; x-- {
 		c := uint8(math.Pow(2, float64(x-1)))
 		if c <= b {
 
