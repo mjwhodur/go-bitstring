@@ -6,34 +6,55 @@ import (
 	"bytes"
 	"math"
 )
+
 // Base BitString structure consisting of bytes representing
 type BitString struct {
 	BitArray []uint8
 }
 
-//
+// BUG(mjwhodur): Not yet working properly
 func (bs *BitString) AsString() string {
 	return string(bs.BitArray)
 }
 
-func (bs *BitString) BitLength() int {
-     return len(bs.BitArray)
+//BUG(mjwhodur): Not yet working properly
+func (bs *BitString) AsBinaryString() string {
+	return ""
 }
 
+//BUG(mjwhodur): Not yet working properly
+func (bs *BitString) AsHexString() string {
+	return ""
+}
+
+//BUG(mjwhodur): Not yet working properly
+func (bs *BitString) AsOctString() string {
+	return ""
+}
+
+//BUG(mjwhodur): Not yet working properly
+func (bs *BitString) BitLength() int {
+	return len(bs.BitArray)
+}
+
+//BUG(mjwhodur): Not yet working properly
 func (bs *BitString) BitStringToUint(start int, end int) int {
 	return 0
 }
 
+//BUG(mjwhodur): Not yet working properly
 func (bs *BitString) BitStringToICID(start int, end int) (error, string) {
 	return nil, ""
 }
 
+//BUG(mjwhodur): Not yet working properly
 func (bs *BitString) BitStringToIBCD(start int, end int) (error, string) {
 	return nil, ""
 }
 
 // Telephony Binary Coded Decimal (TBCD) helper function provide assistance in
 //converting TBCD strings from BitString slice form as in standard ITU-T Q.825.
+//BUG(mjwhodur): Not yet working properly
 func (bs *BitString) BitStringToTBCD(start int, end int) (error, string) {
 	return nil, ""
 }
@@ -44,13 +65,13 @@ func (bs *BitString) appendByte(rune byte) error {
 		bs.BitArray = append(bs.BitArray, bitVal)
 	}
 
- return nil
+	return nil
 }
 
 // Creates BitString struct from byte slice.
 func FromBytes(bytes []byte) (error, BitString) {
 	bs := BitString{}
-	for _, rune := range(bytes) {
+	for _, rune := range bytes {
 		err := bs.appendByte(rune)
 		if err != nil {
 			return err, BitString{}
@@ -67,7 +88,7 @@ func FromStream(buffer bytes.Buffer) (error, BitString) {
 func ByteToBitArray(b byte) BitString {
 	var revbitSlice []uint8
 	var bitSlice []uint8
-	for x:=0; x < 8; x++ {
+	for x := 0; x < 8; x++ {
 		c := byte(math.Pow(2, float64(x)))
 		if c < b {
 			b = b - c
@@ -83,4 +104,3 @@ func ByteToBitArray(b byte) BitString {
 	}
 	return BitString{BitArray: bitSlice}
 }
-
