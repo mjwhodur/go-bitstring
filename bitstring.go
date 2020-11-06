@@ -43,9 +43,9 @@ func (bs *BitString) AsHexString() string {
 			continue
 		}
 		k, l, m, n := sl[i], sl[i+1], sl[i+2], sl[i+3]
-		l = l * 2
-		m = l * 4
-		n = n * 8
+		k = k * 8
+		l = l * 4
+		m = m * 2
 		switch k + l + m + n {
 		case 10:
 			padding = padding + "a"
