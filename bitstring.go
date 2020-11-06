@@ -32,7 +32,7 @@ func (bs *BitString) AsBinaryString() string {
 func (bs *BitString) AsHexString() string {
 	padding := "0x"
 	var sl []uint8
-	for i := bs.BitLength() % 4; i == 0; i-- {
+	for i := bs.BitLength() % 4; i > 0; i-- {
 		sl = append(sl, 0)
 	}
 	for _, elem := range bs.bitArray {
