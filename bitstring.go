@@ -14,7 +14,11 @@ type BitString struct {
 
 // BUG(mjwhodur): Not yet working properly
 func (bs *BitString) AsString() string {
-	return string(bs.BitArray)
+	var s = ""
+	for _, bit := range bs.BitArray {
+		s = s + string(bit)
+	}
+	return s
 }
 
 //BUG(mjwhodur): Not yet working properly
