@@ -39,7 +39,7 @@ func (bs *BitString) AsHexString() string {
 		sl = append(sl, elem)
 	}
 	for i := 0; i < len(sl); i++ {
-		if i % 4 > 0 {
+		if i%4 > 0 {
 			continue
 		}
 		k, l, m, n := sl[i], sl[i+1], sl[i+2], sl[i+3]
@@ -67,9 +67,29 @@ func (bs *BitString) AsHexString() string {
 	return padding
 }
 
-//BUG(mjwhodur): Not yet working properly
+//Returns BitString as Octal String with padding.
 func (bs *BitString) AsOctString() string {
-	return ""
+	padding := "0o"
+	var sl []uint8
+	for i := bs.BitLength() % 3; i < 0; i-- {
+		sl = append(sl, 0)
+	}
+	for _, elem := range bs.bitArray {
+		sl = append(sl, elem)
+	}
+	for i := 0; i < len(sl); i++ {
+		if i%3 > 0 {
+			continue
+		}
+		k, l, m := sl[i], sl[i+1], sl[i+2]
+		k = k * 4
+		l = l * 2
+		m = m
+
+		padding = padding + strconv.Itoa(int(k+l+m))
+
+	}
+	return padding
 }
 
 // Returns subsstring of one BitString as new BitString
@@ -77,30 +97,61 @@ func (bs *BitString) Substring(start int, end int) BitString {
 	return BitString{bitArray: bs.bitArray[start:end]}
 }
 
-//BUG(mjwhodur): Not yet working properly
+func (bs *BitString) SubstringFromBit(start int) BitString {
+	return BitString{bitArray: bs.bitArray[start:len(bs.bitArray)]}
+}
+
+func (bs *BitString) SubstringToBit(end int) BitString {
+	return BitString{bitArray: bs.bitArray[:end]}
+}
+
+//Returns length of BitString
 func (bs *BitString) BitLength() int {
 	return len(bs.bitArray)
 }
 
 //BUG(mjwhodur): Not yet working properly
-func (bs *BitString) BitStringToUint(start int, end int) int {
+//Returns unsigned integer decoded using Big-endian binary encoding.
+func (bs *BitString) Uint(start int, end int) int {
+	return 0
+}
+
+//Returns unsigned integer decoded using little-endian binary encoding.
+func (bs *BitString) UintLE(start int, end int) int {
+	return 0
+
+}
+
+func (bs *BitString) Int(start int, end int) int {
+	return 0
+}
+
+func (bs *BitString) IntLE(start int, end int) int {
 	return 0
 }
 
 //BUG(mjwhodur): Not yet working properly
-func (bs *BitString) BitStringToICID(start int, end int) (error, string) {
+func (bs *BitString) ICID(start int, end int) (error, string) {
 	return nil, ""
 }
 
 //BUG(mjwhodur): Not yet working properly
-func (bs *BitString) BitStringToIBCD(start int, end int) (error, string) {
+func (bs *BitString) IBCD(start int, end int) (error, string) {
 	return nil, ""
+}
+
+func (bs *BitString) Bool(bit int) bool {
+	if bs.bitArray[bit] == 0 {
+		return false
+	} else {
+		return true
+	}
 }
 
 // Telephony Binary Coded Decimal (TBCD) helper function provide assistance in
 //converting TBCD strings from BitString slice form as in standard ITU-T Q.825.
 //BUG(mjwhodur): Not yet working properly
-func (bs *BitString) BitStringToTBCD(start int, end int) (error, string) {
+func (bs *BitString) TBCD(start int, end int) (error, string) {
 	return nil, ""
 }
 
