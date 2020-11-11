@@ -30,7 +30,7 @@ func (bs *BitString) AsBinaryString() string {
 
 //Returns BitString as Hex String with padding.
 func (bs *BitString) AsHexString() string {
-	padding := "0x"
+	hexString := "0x"
 	var sl []uint8
 	for i := bs.BitLength() % 4; i < 0; i-- {
 		sl = append(sl, 0)
@@ -48,28 +48,28 @@ func (bs *BitString) AsHexString() string {
 		m = m * 2
 		switch k + l + m + n {
 		case 10:
-			padding = padding + "a"
+			hexString = hexString + "a"
 		case 11:
-			padding = padding + "b"
+			hexString = hexString + "b"
 		case 12:
-			padding = padding + "c"
+			hexString = hexString + "c"
 		case 13:
-			padding = padding + "d"
+			hexString = hexString + "d"
 		case 14:
-			padding = padding + "e"
+			hexString = hexString + "e"
 		case 15:
-			padding = padding + "f"
+			hexString = hexString + "f"
 		default:
-			padding = padding + strconv.Itoa(int(k+l+m+n))
+			hexString = hexString + strconv.Itoa(int(k+l+m+n))
 		}
 
 	}
-	return padding
+	return hexString
 }
 
 //Returns BitString as Octal String with padding.
 func (bs *BitString) AsOctString() string {
-	padding := "0o"
+	octString := "0o"
 	var sl []uint8
 	for i := bs.BitLength() % 3; i < 0; i-- {
 		sl = append(sl, 0)
@@ -86,10 +86,10 @@ func (bs *BitString) AsOctString() string {
 		l = l * 2
 		m = m
 
-		padding = padding + strconv.Itoa(int(k+l+m))
+		octString = octString + strconv.Itoa(int(k+l+m))
 
 	}
-	return padding
+	return octString
 }
 
 // Returns subsstring of one BitString as new BitString
@@ -122,10 +122,12 @@ func (bs *BitString) UintLE(start int, end int) int {
 
 }
 
+//Returns signed integer decoded using big-endian encoding
 func (bs *BitString) Int(start int, end int) int {
 	return 0
 }
 
+// Returns signed integer decoded using little-endian encoding
 func (bs *BitString) IntLE(start int, end int) int {
 	return 0
 }
@@ -187,7 +189,6 @@ func ByteToBitArray(b byte) BitString {
 	for x := 8; x > 0; x-- {
 		c := uint8(math.Pow(2, float64(x-1)))
 		if c <= b {
-
 			b = b - c
 			revbitSlice = append(revbitSlice, 1)
 
